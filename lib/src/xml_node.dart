@@ -144,9 +144,7 @@ abstract class XmlNode {
 
       void setNode(RegExp regExp) {
         delimiter = regExp.firstMatch(string);
-        node = (delimiter != null)
-            ? string.substring(delimiter!.start, delimiter!.end)
-            : null;
+        node = (delimiter != null) ? string.substring(delimiter!.start, delimiter!.end) : null;
       }
 
       setNode(_delimiter);
@@ -174,8 +172,7 @@ abstract class XmlNode {
           // If it's a processing instruction declaration...
           setNode(Delimiters.processingInstruction);
           if (node != null) {
-            xmlNode =
-                XmlProcessingInstruction.from(node!, trimWhitespace: false);
+            xmlNode = XmlProcessingInstruction.from(node!, trimWhitespace: false);
           }
         }
       } else if (node!.startsWith('<!')) {
@@ -198,10 +195,7 @@ abstract class XmlNode {
           xmlNode = XmlComment.from(node!, trimWhitespace: false);
         } else {
           // If it's a markup delimiter...
-          final type = _markupStartDelimiter
-              .firstMatch(node!)
-              ?.namedGroup('type')
-              ?.toUpperCase();
+          final type = _markupStartDelimiter.firstMatch(node!)?.namedGroup('type')?.toUpperCase();
 
           if (type == 'ATTLIST') {
             setNode(Delimiters.attlist);
@@ -212,8 +206,7 @@ abstract class XmlNode {
             setNode(Delimiters.cdata);
             if (node != null) {
               if (parseCdataAsText) {
-                xmlNode =
-                    XmlText.from(node!, trimWhitespace: false, isMarkup: true);
+                xmlNode = XmlText.from(node!, trimWhitespace: false, isMarkup: true);
               } else {
                 xmlNode = XmlCdata.from(node!, trimWhitespace: false);
               }
@@ -245,10 +238,7 @@ abstract class XmlNode {
                 trimWhitespace: trimWhitespace,
               );
             }
-          } else if (type == 'INCLUDE' ||
-              type == 'IGNORE' ||
-              ((type!.startsWith('&') || type.startsWith('%')) &&
-                  type.endsWith(';'))) {
+          } else if (type == 'INCLUDE' || type == 'IGNORE' || ((type!.startsWith('&') || type.startsWith('%')) && type.endsWith(';'))) {
             setNode(Delimiters.conditional);
             if (node != null) {
               xmlNode = XmlConditional.from(node!,
@@ -314,8 +304,7 @@ abstract class XmlNode {
         );
       }
 
-      if (returnNodesOfType == null ||
-          returnNodesOfType.contains(xmlNode.runtimeType)) {
+      if (returnNodesOfType == null || returnNodesOfType.contains(xmlNode.runtimeType)) {
         if (nodeCount >= start) nodes.add(xmlNode);
         nodeCount++;
         if (stop != null && nodeCount > stop) break;
@@ -324,8 +313,7 @@ abstract class XmlNode {
       string = string.substring(delimiter!.end).trimLeft();
     }
 
-    if (string.isNotEmpty &&
-        (returnNodesOfType == null || returnNodesOfType.contains(XmlText))) {
+    if (string.isNotEmpty && (returnNodesOfType == null || returnNodesOfType.contains(XmlText))) {
       nodes.add(XmlText.from(
         string,
         parseCharacterEntities: parseCharacterEntities,
@@ -363,7 +351,7 @@ abstract class XmlNode {
   ///
   /// Returns `null` if the [uri] can't be reached or no valid XML nodes
   /// are found in the returned document.
-  static Future<dynamic?> fromUri(
+  static Future<dynamic> fromUri(
     String uri, {
     bool parseCharacterEntities = true,
     bool parseComments = false,
@@ -495,8 +483,7 @@ abstract class XmlNode {
   static final RegExp _delimiter = RegExp(r'<.*?>', dotAll: true);
 
   /// Matches the start of markup declarations and captures their type.
-  static final RegExp _markupStartDelimiter =
-      RegExp(r'<!\s*(?:\[)?\s*(?<type>[^>\s\[]*)');
+  static final RegExp _markupStartDelimiter = RegExp(r'<!\s*(?:\[)?\s*(?<type>[^>\s\[]*)');
 }
 
 @immutable
@@ -513,8 +500,7 @@ abstract class XmlNodeWithAttributes extends XmlNode {
     bool doubleQuotes = true,
   }) {
     assert(nestingLevel >= 0);
-    return toString(doubleQuotes: doubleQuotes)
-        .formatLine(nestingLevel, indent);
+    return toString(doubleQuotes: doubleQuotes).formatLine(nestingLevel, indent);
   }
 }
 
@@ -580,8 +566,7 @@ abstract class XmlNodeWithChildren extends XmlNode {
     if (children == null) return null;
     elementName = elementName.toLowerCase();
     return children!.cast<XmlNode?>().firstWhere(
-          (child) =>
-              child is XmlElement && child.name.toLowerCase() == elementName,
+          (child) => child is XmlElement && child.name.toLowerCase() == elementName,
           orElse: () => null,
         ) as XmlElement?;
   }
@@ -605,8 +590,7 @@ abstract class XmlNodeWithChildren extends XmlNode {
     if (children == null) return null;
     elementName = elementName.toLowerCase();
     return children!.cast<XmlNode?>().lastWhere(
-          (child) =>
-              child is XmlElement && child.name.toLowerCase() == elementName,
+          (child) => child is XmlElement && child.name.toLowerCase() == elementName,
           orElse: () => null,
         ) as XmlElement?;
   }
@@ -627,8 +611,7 @@ abstract class XmlNodeWithChildren extends XmlNode {
     assert(elementName.isNotEmpty);
     assert(start >= 0);
     assert(stop == null || stop >= start);
-    return getElementsWhere(
-        name: elementName, start: start, stop: stop, global: false);
+    return getElementsWhere(name: elementName, start: start, stop: stop, global: false);
   }
 
   /// Returns all direct children with properties matching those specified.
@@ -960,8 +943,7 @@ abstract class XmlNodeWithChildren extends XmlNode {
   /// elements will be returned.
   ///
   /// Returns `null` if no element can be found.
-  XmlElement? getNthElement(int index, String elementName,
-      {bool ignoreNestedMatches = true}) {
+  XmlElement? getNthElement(int index, String elementName, {bool ignoreNestedMatches = true}) {
     assert(index >= 0);
     assert(elementName.isNotEmpty);
     return getElementsWhere(
@@ -1478,8 +1460,7 @@ abstract class XmlNodeWithChildren extends XmlNode {
       if (attributeNames != null || attributes != null) {
         if (element.attributes == null) return false;
 
-        if (attributesMustBeIdentical &&
-            attributes!.length != element.attributes!.length) {
+        if (attributesMustBeIdentical && attributes!.length != element.attributes!.length) {
           return false;
         }
 
@@ -1511,13 +1492,11 @@ abstract class XmlNodeWithChildren extends XmlNode {
       if (children != null) {
         if (element.children == null) return false;
 
-        if (childrenMustBeIdentical &&
-            element.children!.length != children.length) {
+        if (childrenMustBeIdentical && element.children!.length != children.length) {
           return false;
         }
 
-        var hasChildren =
-            (matchAllChildren || childrenMustBeIdentical) ? children.length : 1;
+        var hasChildren = (matchAllChildren || childrenMustBeIdentical) ? children.length : 1;
 
         for (var i = 0; i < children.length; i++) {
           final child = children[i];

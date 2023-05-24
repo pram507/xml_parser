@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 import '../helpers/delimiters.dart';
 import '../helpers/formatters.dart';
 import '../xml_node.dart';
-import './xml_attribute.dart';
 
 /// A XML element.
 ///
@@ -35,8 +34,7 @@ class XmlElement extends XmlNodeWithChildren {
   String? get id {
     return attributes
         ?.cast<XmlAttribute?>()
-        .firstWhere((attribute) => attribute!.name.toLowerCase() == 'id',
-            orElse: () => null)
+        .firstWhere((attribute) => attribute!.name.toLowerCase() == 'id', orElse: () => null)
         ?.value
         .toLowerCase();
   }
@@ -75,8 +73,7 @@ class XmlElement extends XmlNodeWithChildren {
     attributeName = attributeName.toLowerCase();
 
     for (var attribute in attributes!) {
-      if (attribute.name.toLowerCase() == attributeName &&
-          attribute.value == attributeValue) {
+      if (attribute.name.toLowerCase() == attributeName && attribute.value == attributeValue) {
         return true;
       }
     }
@@ -508,14 +505,12 @@ class XmlElement extends XmlNodeWithChildren {
               trimWhitespace: false,
             )!;
 
-            if (returnElementsWithAttributesNamed != null ||
-                returnElementsWithAttributes != null) {
-              var attributeNamesToValidate =
-                  (returnElementsWithAttributesNamed != null)
-                      ? (matchAllAttributes)
-                          ? returnElementsWithAttributesNamed.length
-                          : 1
-                      : 0;
+            if (returnElementsWithAttributesNamed != null || returnElementsWithAttributes != null) {
+              var attributeNamesToValidate = (returnElementsWithAttributesNamed != null)
+                  ? (matchAllAttributes)
+                      ? returnElementsWithAttributesNamed.length
+                      : 1
+                  : 0;
 
               var attributesToValidate = (returnElementsWithAttributes != null)
                   ? (matchAllAttributes)
@@ -524,19 +519,15 @@ class XmlElement extends XmlNodeWithChildren {
                   : 0;
 
               for (var attribute in attributes) {
-                if (attributeNamesToValidate > 0 &&
-                    returnElementsWithAttributesNamed!
-                        .contains(attribute.name)) {
+                if (attributeNamesToValidate > 0 && returnElementsWithAttributesNamed!.contains(attribute.name)) {
                   attributeNamesToValidate--;
                 }
 
-                if (attributesToValidate > 0 &&
-                    returnElementsWithAttributes!.contains(attribute)) {
+                if (attributesToValidate > 0 && returnElementsWithAttributes!.contains(attribute)) {
                   attributesToValidate--;
                 }
 
-                if (attributeNamesToValidate <= 0 &&
-                    attributesToValidate <= 0) {
+                if (attributeNamesToValidate <= 0 && attributesToValidate <= 0) {
                   break;
                 }
               }
@@ -545,21 +536,14 @@ class XmlElement extends XmlNodeWithChildren {
                 attriubtesAreValid = false;
               }
             }
-          } else if (returnElementsWithAttributes != null &&
-              returnElementsWithAttributes.isNotEmpty) {
+          } else if (returnElementsWithAttributes != null && returnElementsWithAttributes.isNotEmpty) {
             attriubtesAreValid = false;
           }
 
           if (attriubtesAreValid) {
-            final id = attributes
-                ?.cast<XmlAttribute?>()
-                .firstWhere((attribute) => attribute!.name == 'id',
-                    orElse: () => null)
-                ?.value;
+            final id = attributes?.cast<XmlAttribute?>().firstWhere((attribute) => attribute!.name == 'id', orElse: () => null)?.value;
 
-            if (elementCount >= start &&
-                (returnElementsWithId == null ||
-                    returnElementsWithId.contains(id))) {
+            if (elementCount >= start && (returnElementsWithId == null || returnElementsWithId.contains(id))) {
               elements.add(
                 XmlElement(
                   name: name,
@@ -589,14 +573,8 @@ class XmlElement extends XmlNodeWithChildren {
       o is XmlElement &&
       name.toLowerCase() == o.name.toLowerCase() &&
       id == o.id &&
-      ((attributes == null && o.attributes == null) ||
-          (attributes != null &&
-              o.attributes != null &&
-              attributes!.equals(o.attributes!))) &&
-      ((children == null && o.children == null) ||
-          (children != null &&
-              o.children != null &&
-              children!.equals(o.children!)));
+      ((attributes == null && o.attributes == null) || (attributes != null && o.attributes != null && attributes!.equals(o.attributes!))) &&
+      ((children == null && o.children == null) || (children != null && o.children != null && children!.equals(o.children!)));
 
   @override
   int get hashCode => name.hashCode ^ attributes.hashCode ^ children.hashCode;
